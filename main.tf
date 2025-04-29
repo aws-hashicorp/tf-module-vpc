@@ -16,6 +16,8 @@ resource "aws_vpc" "vpc" {
 
 }
 
+# PRIVATE SUBNET CREATION
+# This module creates private subnets within the VPC.
 
 resource "aws_subnet" "private_subnet" {
 
