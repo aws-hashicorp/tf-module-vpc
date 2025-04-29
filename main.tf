@@ -16,6 +16,9 @@ resource "aws_vpc" "vpc" {
 
 }
 
+# PRIVATE SUBNET CREATION
+# This module creates private subnets within the VPC.
+
 resource "aws_subnet" "private_subnet" {
 
   count                   = var.create_private_subnet ? length(var.private_subnet_cidr_block) : 0
