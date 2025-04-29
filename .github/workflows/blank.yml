@@ -33,6 +33,13 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      # Install Terrascan
+      - name: Install Terrascan
+        run: |
+          curl -L https://github.com/accurics/terrascan/releases/latest/download/terrascan-linux-amd64 -o terrascan
+          chmod +x terrascan
+          sudo mv terrascan /usr/local/bin/
+
       # Initialize Terrascan
       - name: Terrascan Init
         run: terrascan init
