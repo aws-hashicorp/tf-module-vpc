@@ -31,11 +31,22 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_route_table" "private_route_table" {
+
   count  = var.create_private_subnet ? 1 : 0
   vpc_id = aws_vpc.vpc[0].id
   tags   = { Name = "private-route-table-${var.name}" }
 
 }
+
+resource "aws_route" "allow_all_outbound" {
+
+  count                  = aws_ec2_transit_gateway_vpc_attachment.tgw_attachment[0].state == "available" ? 1 : 0
+  route_table_id         = aws_route_table.private_route_table[count.index].id
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = var.transit_gateway_id
+
+}
+
 
 resource "aws_route_table_association" "private_route_table_association" {
 
@@ -73,7 +84,6 @@ resource "aws_route_table_association" "database_route_table_association" {
   route_table_id = aws_route_table.database_route_table[count.index].id
 
 }
-
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attachment" {
 
