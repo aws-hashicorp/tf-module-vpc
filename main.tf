@@ -32,7 +32,7 @@ resource "aws_subnet" "private_subnet" {
 
 resource "aws_route_table" "private_route_table" {
 
-  count = length(var.private_subnet_cidr_block) > 0 ? 1 : 0
+  count = length(var.private_subnet_cidr_block) ? 1 : 0
   vpc_id = aws_vpc.vpc[0].id
   tags   = { Name = "private-route-table-${var.name}" }
 
@@ -61,7 +61,7 @@ resource "aws_subnet" "database_subnet" {
 
 resource "aws_route_table" "database_route_table" {
 
-  count = length(var.database_subnet_cidr_block) > 0 ? 1 : 0
+  count = length(var.database_subnet_cidr_block) ? 1 : 0
   vpc_id = aws_vpc.vpc[0].id
   tags   = { Name = "database-route-table-${var.name}" }
 
