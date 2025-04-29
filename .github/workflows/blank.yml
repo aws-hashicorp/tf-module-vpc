@@ -37,6 +37,8 @@ jobs:
       - name: Install Terrascan
         run: |
           curl -L https://github.com/accurics/terrascan/releases/latest/download/terrascan-linux-amd64 -o terrascan
+          echo "Verifying Terrascan binary..."
+          file terrascan
           chmod +x terrascan
           sudo mv terrascan /usr/local/bin/
 
