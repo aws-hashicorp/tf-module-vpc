@@ -39,8 +39,8 @@ resource "aws_route_table" "private_route_table" {
 }
 
 resource "aws_route" "allow_all_outbound" {
-
-  count                  = aws_ec2_transit_gateway_vpc_attachment.tgw_attachment[0].state == "available" ? 1 : 0
+  
+  count                  = var.create_transit_gateway_attachment ? 1 : 0
   route_table_id         = aws_route_table.private_route_table[count.index].id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = var.transit_gateway_id
