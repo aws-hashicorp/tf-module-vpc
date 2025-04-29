@@ -38,13 +38,18 @@ jobs:
         run: |
           curl -L https://github.com/accurics/terrascan/releases/latest/download/terrascan-linux-amd64 -o terrascan
           echo "Verifying Terrascan binary..."
-          file terrascan
+          file terrascan || exit 1
           chmod +x terrascan
-          sudo mv terrascan /usr/local/bin/
-
+          sudo mv terrascan /usr/local/bin/terrascan
+          terrascan version || exit 1
       # Initialize Terrascan
       - name: Terrascan Init
-        run: terrascan init
+        run: |
+          if ! command -v terrascan &> /dev/null; then
+            echo "Terrascan not found in PATH"
+            exit 127
+          fi
+          terrascan init
 
       # Run Terrascan for security checks
       - name: Terrascan Security Scan
