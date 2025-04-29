@@ -12,3 +12,8 @@ output "database_subnet_ids" {
   description = "The IDs of the database subnets"
   value       = aws_subnet.database_subnet.*.id
 }
+
+output "transit_gateway_attachment_status" {
+  description = "The status of the Transit Gateway attachment"
+  value       = aws_ec2_transit_gateway_vpc_attachment.tgw_attachment.*.state
+}
