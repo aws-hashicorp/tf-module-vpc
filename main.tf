@@ -16,8 +16,6 @@ resource "aws_vpc" "vpc" {
 
 }
 
-
-#
 resource "aws_subnet" "private_subnet" {
 
   count                   = var.create_private_subnet ? length(var.private_subnet_cidr_block) : 0
