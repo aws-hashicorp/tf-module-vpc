@@ -18,14 +18,14 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "private_subnet" {
 
-  for_each                = var.create_private_subnet ? tomap(zipmap(var.private_subnet_cidr_block, var.availability_zones)) : {}
+  count                   = var.create_private_subnet ? length(var.private_subnet_cidr_block) : 0
   vpc_id                  = aws_vpc.vpc[0].id
-  cidr_block              = each.key
-  availability_zone       = each.value
+  cidr_block              = element(var.private_subnet_cidr_block, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "private-subnet-${var.name}-${split("-", each.value)[2]}"
+    Name = "private-subnet-${var.name}-${[for az in var.availability_zones : split("-", az)[2]][count.index]}"
   }
 
 }
@@ -54,7 +54,7 @@ resource "aws_subnet" "database_subnet" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "database-subnet-${var.name}-${[for az in var.availability_zones : split("-", az)[2]]}"
+    Name = format("database-subnet-${var.name}-%s", var.availability_zones[count.index])
   }
 
 }
