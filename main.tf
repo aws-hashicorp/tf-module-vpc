@@ -42,7 +42,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 
   count          = var.create_private_subnet ? length(var.private_subnet_cidr_block) : 0
   subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = aws_route_table.private_route_table.id
+  route_table_id = aws_route_table.private_route_table[count.index].id
 
 }
 
@@ -71,7 +71,7 @@ resource "aws_route_table_association" "database_route_table_association" {
 
   count          = var.create_database_subnet ? length(var.database_subnet_cidr_block) : 0
   subnet_id      = aws_subnet.database_subnet[count.index].id
-  route_table_id = aws_route_table.database_route_table.id
+  route_table_id = aws_route_table.database_route_table[count.index].id
 
 }
 
