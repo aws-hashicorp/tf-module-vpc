@@ -2,7 +2,7 @@
 variable "availability_zones" {
   description = "List of availability zones for the private subnet."
   type        = list(string)
-  default     = [""]
+  default     = []
 }
 
 # VPC VARIABLES
@@ -15,13 +15,13 @@ variable "create_vpc" {
 variable "vpc_cidr_block" {
   description = "The CIDR block for the VPC."
   type        = string
-  default     = ""
+  default     = "0.0.0.0/0"
 }
 
 variable "name" {
   description = "The name of the VPC."
   type        = string
-  default     = "my-vpc"
+  default     = ""
 }
 
 # PRIVATE SUBNET VARIABLES
@@ -34,7 +34,7 @@ variable "create_private_subnet" {
 variable "private_subnet_cidr_block" {
   description = "The CIDR block for the private subnet."
   type        = list(string)
-  default     = [""]
+  default     = []
 }
 
 
@@ -48,7 +48,7 @@ variable "create_database_subnet" {
 variable "database_subnet_cidr_block" {
   description = "The CIDR block for the database subnet."
   type        = list(string)
-  default     = [""]
+  default     = []
 }
 
 # TRANSIT GATEWAY VARIABLES
