@@ -44,8 +44,6 @@ resource "aws_route_table" "private_route_table" {
     Manager = "Terraform"
   }
 
-  depends_on = [aws_vpc.vpc]
-
 }
 
 resource "aws_route" "allow_all_outbound" {
