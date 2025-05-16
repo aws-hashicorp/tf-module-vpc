@@ -28,6 +28,8 @@ resource "aws_subnet" "private_subnet" {
     Name = "private-subnet-${var.name}-${[for az in var.availability_zones : split("-", az)[2]][count.index]}"
   }
 
+  depends_on = [aws_vpc.vpc]
+
 }
 
 resource "aws_route_table" "private_route_table" {
@@ -35,6 +37,8 @@ resource "aws_route_table" "private_route_table" {
   count  = var.create_private_subnet ? 1 : 0
   vpc_id = aws_vpc.vpc[0].id
   tags   = { Name = "private-route-table-${var.name}" }
+
+  depends_on = [aws_vpc.vpc]
 
 }
 
@@ -62,7 +66,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 
   count          = var.create_private_subnet ? length(var.private_subnet_cidr_block) : 0
   subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = aws_route_table.private_route_table[count.index].id
+  route_table_id = element(aws_route_table.private_route_table, count.index).id
 
 }
 
@@ -91,7 +95,7 @@ resource "aws_route_table_association" "database_route_table_association" {
 
   count          = var.create_database_subnet ? length(var.database_subnet_cidr_block) : 0
   subnet_id      = aws_subnet.database_subnet[count.index].id
-  route_table_id = aws_route_table.database_route_table[count.index].id
+  route_table_id = element(aws_route_table.database_route_table, count.index).id
 
 }
 
