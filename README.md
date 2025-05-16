@@ -35,6 +35,7 @@ Este módulo de Terraform crea y configura una VPC en AWS, incluyendo subredes p
 ```hcl
 module "vpc" {
     source                          = "ruta/al/modulo"
+    
     create_vpc                      = true
     vpc_cidr_block                  = "10.0.0.0/16"
     name                            = "mi-vpc"
