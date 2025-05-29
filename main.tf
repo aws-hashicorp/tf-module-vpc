@@ -10,10 +10,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  tags = {
-    Name    = "vpc-${var.name}"
-    Manager = "Terraform"
-  }
+  tags = merge(var.tags, { Name = "vpc-${var.name}" })
 
 }
 
@@ -25,10 +22,9 @@ resource "aws_subnet" "private_subnet" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = false
 
-  tags = {
-    Name    = "private-subnet-${var.name}-${[for az in var.availability_zones : split("-", az)[2]][count.index]}"
-    Manager = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "private-subnet-${var.name}-${[for az in var.availability_zones : split("-", az)[2]][count.index]}"
+  })
 
   depends_on = [aws_vpc.vpc]
 
@@ -39,10 +35,9 @@ resource "aws_route_table" "private_route_table" {
   count  = var.create_private_subnet ? 1 : 0
   vpc_id = aws_vpc.vpc[0].id
 
-  tags = {
-    Name    = "private-route-table-${var.name}"
-    Manager = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "private-route-table-${var.name}"
+  })
 
   depends_on = [aws_vpc.vpc]
 }
@@ -83,9 +78,9 @@ resource "aws_subnet" "database_subnet" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = false
 
-  tags = {
+  tags = merge(var.tags, {
     Name = "database-subnet-${var.name}-${[for az in var.availability_zones : split("-", az)[2]][count.index]}"
-  Manager = "Terraform" }
+  })
 
 }
 
@@ -93,10 +88,9 @@ resource "aws_route_table" "database_route_table" {
 
   count  = var.create_database_subnet ? 1 : 0
   vpc_id = aws_vpc.vpc[0].id
-  tags = {
-    Name    = "database-route-table-${var.name}"
-    Manager = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "database-route-table-${var.name}"
+  })
 
 }
 
@@ -115,9 +109,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attachment" {
   vpc_id             = aws_vpc.vpc[0].id
   subnet_ids         = [for subnet in aws_subnet.private_subnet : subnet.id]
 
-  tags = {
-    Name    = "tgw-attachment-${var.name}"
-    Manager = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "tgw-attachment-${var.name}"
+  })
 
 }

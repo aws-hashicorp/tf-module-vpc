@@ -5,6 +5,12 @@ variable "availability_zones" {
   default     = []
 }
 
+variable "tags" {
+  description = "A map of tags to assign to resources."
+  type        = map(string)
+  default     = {}
+}
+
 # VPC VARIABLES
 variable "create_vpc" {
   description = "Flag to create a VPC."

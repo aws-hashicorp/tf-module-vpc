@@ -3,6 +3,11 @@ output "vpc_id" {
   value       = element(concat(aws_vpc.vpc.*.id, [""]), 0)
 }
 
+output "vpc_cidr_block" {
+  description = "The CIDR block of the VPC"
+  value       = aws_vpc.vpc[0].cidr_block
+}
+
 output "private_subnet_ids" {
   description = "The IDs of the private subnets"
   value       = aws_subnet.private_subnet.*.id
